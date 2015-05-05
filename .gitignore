@@ -1,0 +1,9 @@
+.idea
+db.sqlite3
+local_settings.py
+.DS_Store
+__pycache__
+/static/
+*.pyc
+debug.log
+.env
