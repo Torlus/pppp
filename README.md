@@ -14,8 +14,11 @@ Assuming a working installation of Python 3.
 ## Setup
 
 > python manage.py migrate
+> python manage.py syncdb
 
+## Running
 
+> python manage.py runserver
 
 # Development notes
 
