@@ -1,5 +1,5 @@
 # pppp
-Pessimistic Provisioning of People per Project
+"People Per Project" Provisioning
 
 # Installation
 
