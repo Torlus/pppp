@@ -25,6 +25,7 @@ admin.autodiscover()
 router = DefaultRouter()
 router.register(r'users', views.UserViewSet)
 router.register(r'groups', views.GroupViewSet)
+router.register(r'teams', views.TeamViewSet)
 router.include_root_view = False
 
 

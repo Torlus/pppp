@@ -13,6 +13,7 @@ Assuming a working installation of Python 3.
 
 ## Setup
 
+> pip install -r reqs
 > python manage.py migrate
 > python manage.py syncdb
 

@@ -1,11 +1,12 @@
-from django.contrib.auth.models import User, Group
-
 from rest_framework import permissions, viewsets, views
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
 
-from .serializers import UserSerializer, GroupSerializer
+from django.contrib.auth.models import User, Group
+from .models import Team
 
+from .serializers import UserSerializer, GroupSerializer
+from .serializers import TeamSerializer
 
 class APIRootView(views.APIView):
     permission_classes = [
@@ -15,7 +16,8 @@ class APIRootView(views.APIView):
     def get(self, request, format=None):
         return Response({
             'users': reverse('user-list', request=request, format=format),
-            'groups': reverse('group-list', request=request, format=format)
+            'groups': reverse('group-list', request=request, format=format),
+            'teams': reverse('team-list', request=request, format=format),
         })
 
 
@@ -35,3 +37,10 @@ class GroupViewSet(viewsets.ReadOnlyModelViewSet):
     ]
 
 
+class TeamViewSet(viewsets.ModelViewSet):
+    queryset = Team.objects.all()
+    serializer_class = TeamSerializer
+    permission_classes = [
+        permissions.IsAuthenticated,
+        # permissions.DjangoModelPermissions,
+    ]
