@@ -1,12 +1,13 @@
 from rest_framework import permissions, viewsets, views
+from rest_framework.validators import ValidationError
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
 
 from django.contrib.auth.models import User, Group
-from .models import Team, Skill
+from .models import Team, Skill, Teammate
 
 from .serializers import UserSerializer, GroupSerializer
-from .serializers import TeamSerializer, SkillSerializer
+from .serializers import TeamSerializer, SkillSerializer, TeammateSerializer
 
 class APIRootView(views.APIView):
     permission_classes = [
@@ -19,6 +20,7 @@ class APIRootView(views.APIView):
             'groups': reverse('group-list', request=request, format=format),
             'teams': reverse('team-list', request=request, format=format),
             'skills': reverse('skill-list', request=request, format=format),
+            'teammates': reverse('teammate-list', request=request, format=format),
         })
 
 
@@ -54,3 +56,26 @@ class SkillViewSet(viewsets.ModelViewSet):
         permissions.IsAuthenticated,
         permissions.DjangoModelPermissions,
     ]
+
+
+class TeammateViewSet(viewsets.ModelViewSet):
+    queryset = Teammate.objects.all()
+    serializer_class = TeammateSerializer
+    permission_classes = [
+        permissions.IsAuthenticated,
+        permissions.DjangoModelPermissions,
+    ]
+
+    def check_bounds(self):
+        days = int(self.request.data['half_days_per_week'])
+        if days < 1 or days > 10:
+            raise ValidationError('half_days_per_week must be an integer between 1 to 10')
+
+    def perform_create(self, serializer):
+        self.check_bounds()
+        serializer.save()
+
+    def perform_update(self, serializer):
+        self.check_bounds()
+        serializer.save()
+

@@ -12,6 +12,7 @@ router.register(r'users', views.UserViewSet)
 router.register(r'groups', views.GroupViewSet)
 router.register(r'teams', views.TeamViewSet)
 router.register(r'skills', views.SkillViewSet)
+router.register(r'teammates', views.TeammateViewSet)
 router.include_root_view = False
 
 
