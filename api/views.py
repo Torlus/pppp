@@ -1,13 +1,14 @@
 from rest_framework import permissions, viewsets, views
-from rest_framework.validators import ValidationError
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
 
 from django.contrib.auth.models import User, Group
 from .models import Team, Skill, Teammate
+from .models import Category, Project, Task, Work
 
 from .serializers import UserSerializer, GroupSerializer
 from .serializers import TeamSerializer, SkillSerializer, TeammateSerializer
+from .serializers import CategorySerializer, ProjectSerializer, TaskSerializer, WorkSerializer
 
 class APIRootView(views.APIView):
     permission_classes = [
@@ -21,6 +22,10 @@ class APIRootView(views.APIView):
             'teams': reverse('team-list', request=request, format=format),
             'skills': reverse('skill-list', request=request, format=format),
             'teammates': reverse('teammate-list', request=request, format=format),
+            'categories': reverse('category-list', request=request, format=format),
+            'projects': reverse('project-list', request=request, format=format),
+            'tasks': reverse('task-list', request=request, format=format),
+            'works': reverse('work-list', request=request, format=format),
         })
 
 
@@ -66,16 +71,37 @@ class TeammateViewSet(viewsets.ModelViewSet):
         permissions.DjangoModelPermissions,
     ]
 
-    def check_bounds(self):
-        days = int(self.request.data['half_days_per_week'])
-        if days < 1 or days > 10:
-            raise ValidationError('half_days_per_week must be an integer between 1 to 10')
+class CategoryViewSet(viewsets.ModelViewSet):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+    permission_classes = [
+        permissions.IsAuthenticated,
+        permissions.DjangoModelPermissions,
+    ]
 
-    def perform_create(self, serializer):
-        self.check_bounds()
-        serializer.save()
 
-    def perform_update(self, serializer):
-        self.check_bounds()
-        serializer.save()
+class ProjectViewSet(viewsets.ModelViewSet):
+    queryset = Project.objects.all()
+    serializer_class = ProjectSerializer
+    permission_classes = [
+        permissions.IsAuthenticated,
+        permissions.DjangoModelPermissions,
+    ]
+
+
+class TaskViewSet(viewsets.ModelViewSet):
+    queryset = Task.objects.all()
+    serializer_class = TaskSerializer
+    permission_classes = [
+        permissions.IsAuthenticated,
+        permissions.DjangoModelPermissions
+    ]
+
+class WorkViewSet(viewsets.ModelViewSet):
+    queryset = Work.objects.all()
+    serializer_class = WorkSerializer
+    permission_classes = [
+        permissions.IsAuthenticated,
+        permissions.DjangoModelPermissions,
+    ]
 

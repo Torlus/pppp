@@ -20,7 +20,7 @@ class Skill(models.Model):
     desc = models.CharField(max_length=250, blank=True, default='')
 
     def __str__(self):
-        return "[" + self.code + ": " + self.desc + "]"
+        return self.code
 
     class Meta:
         ordering = ('created_at',)
@@ -37,6 +37,61 @@ class Teammate(models.Model):
 
     def __str__(self):
         return str(self.team) + " / [" + self.name + "]"
+
+    class Meta:
+        ordering = ('created_at',)
+
+
+class Category(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    code = models.CharField(max_length=50, blank=False)
+    desc = models.CharField(max_length=250, blank=True, default='')
+
+    def __str__(self):
+        return "[" + self.code + ": " + self.desc + "]"
+
+    class Meta:
+        ordering = ('created_at',)
+
+
+class Project(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    category = models.ForeignKey(Category, on_delete=models.PROTECT)
+    code = models.CharField(max_length=50, blank=False)
+    desc = models.CharField(max_length=250, blank=True, default='')
+
+    def __str__(self):
+        return str(self.category) + " / [" + self.code + ": " + self.desc + "]"
+
+    class Meta:
+        ordering = ('created_at',)
+
+
+class Task(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    project = models.ForeignKey(Project, on_delete=models.PROTECT)
+    code = models.CharField(max_length=50, blank=False)
+    desc = models.CharField(max_length=250, blank=True, default='')
+
+    def __str__(self):
+        return str(self.project) + " / [" + self.code + ": " + self.desc + "]"
+
+    class Meta:
+        ordering = ('created_at',)
+
+
+class Work(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    skill = models.ForeignKey(Skill, on_delete=models.PROTECT)
+    task = models.ForeignKey(Task, on_delete=models.PROTECT)
+    man_days = models.IntegerField()
+
+    def __str__(self):
+        return str(self.task) + " / [" + str(self.skill) + ": " + str(self.man_days) + "]"
 
     class Meta:
         ordering = ('created_at',)
