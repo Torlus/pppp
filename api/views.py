@@ -1,6 +1,7 @@
 from rest_framework import permissions, viewsets, views
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
+from django.shortcuts import redirect
 
 from django.contrib.auth.models import User, Group
 from .models import Team, Skill, Teammate
@@ -9,6 +10,10 @@ from .models import Category, Project, Task, Work
 from .serializers import UserSerializer, GroupSerializer
 from .serializers import TeamSerializer, SkillSerializer, TeammateSerializer
 from .serializers import CategorySerializer, ProjectSerializer, TaskSerializer, WorkSerializer
+
+def home(request):
+    return redirect('/static/index.html')
+
 
 class APIRootView(views.APIView):
     permission_classes = [

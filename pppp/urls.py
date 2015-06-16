@@ -21,6 +21,7 @@ router.include_root_view = False
 
 
 urlpatterns = [
+    url(r'^/?$', views.home),
     url(r'^api/?$', views.APIRootView.as_view(), name='api-root'),
     url(r'^api/', include(router.urls)),
     url(r'^admin/', include(admin.site.urls)),
