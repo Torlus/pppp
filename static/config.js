@@ -54,7 +54,7 @@
                 nga.field('code').label('Code'),
                 nga.field('desc').label('Description'),
             ])
-            .listActions(['show', 'edit', 'delete']);
+            .listActions(['edit', 'delete']);
 
         skill.creationView()
             .title('Nouvelle compétence')
@@ -88,7 +88,7 @@
                 nga.field('code').label('Code'),
                 nga.field('desc').label('Description'),
             ])
-            .listActions(['show', 'edit', 'delete']);
+            .listActions(['edit', 'delete']);
 
         team.creationView()
             .title('Nouvelle équipe')
@@ -111,6 +111,19 @@
         // ================ TEAMMATES ================
         // ===========================================
 
+        var availabilty = [
+            { label:'0.5 jours / semaine', value:'1' },
+            { label:'1 jour  / semaine', value:'2' },
+            { label:'1.5 jours / semaine', value:'3' },
+            { label:'2 jours / semaine', value:'4' },
+            { label:'2.5 jours / semaine', value:'5' },
+            { label:'3 jours / semaine', value:'6' },
+            { label:'3.5 jours / semaine', value:'7' },
+            { label:'4 jours / semaine', value:'8' },
+            { label:'4.5 jours / semaine', value:'9' },
+            { label:'5 jours / semaine', value:'10' }
+        ];
+
         teammate.label("Membres d'équipe");
         teammate.dashboardView().disable();
 
@@ -118,9 +131,18 @@
             .title('Membres d\'équipes')
             .fields([
                 nga.field('id').label('#'),
-                nga.field('name').label('Nom')
+                nga.field('name').label('Nom'),
+                nga.field('external', 'boolean').label('Prestataire'),
+                nga.field('team', 'reference').label('Equipe')
+                    .targetEntity(team)
+                    .targetField(nga.field('desc')),
+                nga.field('skills', 'reference_many').label('Compétences')
+                    .targetEntity(skill)
+                    .targetField(nga.field('desc')),
+                nga.field('half_days_per_week').label('Disponibilité')
+                    .map(function(value) { return (value / 2); })
             ])
-            .listActions(['show', 'edit', 'delete']);
+            .listActions(['edit', 'delete']);
 
         teammate.creationView()
             .title('Nouveau membre d\'équipe')
@@ -130,24 +152,19 @@
                     .validation({ required: true, minlength: 3, maxlength: 50 }),
                 nga.field('external', 'boolean').label('Prestataire'),
                 nga.field('half_days_per_week', 'choice').label('Disponibilité')
-                    .choices([
-                        { label:'0.5 jours', value:'1' },
-                        { label:'1 jour', value:'2' },
-                        { label:'1.5 jours', value:'3' },
-                        { label:'2 jours', value:'4' },
-                        { label:'2.5 jours', value:'5' },
-                        { label:'3 jours', value:'6' },
-                        { label:'3.5 jours', value:'7' },
-                        { label:'4 jours', value:'8' },
-                        { label:'4.5 jours', value:'9' },
-                        { label:'5 jours', value:'10' }
-                    ]),
+                    .choices(availabilty),
                 nga.field('skills', 'reference_many').label('Compétences')
                     .targetEntity(skill)
                     .targetField(nga.field('desc')),
                 nga.field('team', 'reference').label('Equipe')
                     .targetEntity(team)
                     .targetField(nga.field('desc'))
+            ]);
+
+        teammate.editionView()
+            .title('Edition du membre d\'équipe #{{ entry.values.id }}')
+            .fields([
+                teammate.creationView().fields()
             ]);
 
         // =======================================
