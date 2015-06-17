@@ -17,14 +17,14 @@
             return { params: params };
         });
         RestangularProvider.setResponseExtractor(function(response, operation, what, url) {
-            var newResponse;
+            var res;
             if (operation === "getList") {
-                newResponse = response.results;
+                res = response.results;
             } else {
-                newResponse = response;
+                res = response;
             }
-            console.log(newResponse);
-            return newResponse;
+            console.log(res);
+            return res;
         });
         RestangularProvider.setRequestSuffix('/?');
 
@@ -34,11 +34,16 @@
         var skill = nga.entity('skills');
         var team = nga.entity('teams');
         var teammate = nga.entity('teammates');
+        var category = nga.entity('categories');
+        var project = nga.entity('projects');
 
         admin
             .addEntity(skill)
             .addEntity(team)
-            .addEntity(teammate);
+            .addEntity(teammate)
+            .addEntity(category)
+            .addEntity(project)
+            ;
 
         // ========================================
         // ================ SKILLS ================
@@ -167,8 +172,87 @@
                 teammate.creationView().fields()
             ]);
 
-        // =======================================
+        // ============================================
+        // ================ CATEGORIES ================
+        // ============================================
 
+        category.label("Catégories de projets");
+        category.dashboardView().disable();
+
+        category.listView()
+            .title('Catégories de projets')
+            .fields([
+                nga.field('id').label('#'),
+                nga.field('code').label('Code'),
+                nga.field('desc').label('Description'),
+            ])
+            .listActions(['edit', 'delete']);
+
+        category.creationView()
+            .title('Nouvelle catégorie de projets')
+            .fields([
+                nga.field('code').label('Code')
+                    .attributes({ placeholder: 'Exemple: MONETIQUE' })
+                    .validation({ required: true, minlength: 3, maxlength: 50 }),
+                nga.field('desc').label('Description')
+                    .attributes({ placeholder: 'Exemple: Projets monétiques' })
+                    .validation({ required: true, minlength: 3, maxlength: 250 })
+            ]);
+
+        category.editionView()
+            .title('Edition de la catégorie de projets #{{ entry.values.id }}')
+            .fields([
+                category.creationView().fields()
+            ]);
+
+        // ==========================================
+        // ================ PROJECTS ================
+        // ==========================================
+
+        project.label("Projets");
+        project.dashboardView().disable();
+
+        project.listView()
+            .title('Projets')
+            .fields([
+                nga.field('id').label('#'),
+                nga.field('code').label('Code'),
+                nga.field('desc').label('Description'),
+                nga.field('category', 'reference').label('Catégorie')
+                    .targetEntity(category)
+                    .targetField(nga.field('desc'))
+            ])
+            .listActions(['edit', 'delete']);
+
+        project.creationView()
+            .title('Nouveau projet')
+            .fields([
+                nga.field('code').label('Code')
+                    .attributes({ placeholder: 'Exemple: LUMA' })
+                    .validation({ required: true, minlength: 3, maxlength: 50 }),
+                nga.field('desc').label('Description')
+                    .attributes({ placeholder: 'Exemple: Lyra Update MAnager' })
+                    .validation({ required: true, minlength: 3, maxlength: 250 }),
+                nga.field('category', 'reference').label('Catégorie')
+                    .targetEntity(category)
+                    .targetField(nga.field('desc'))
+            ]);
+
+        project.editionView()
+            .title('Edition du projet #{{ entry.values.id }}')
+            .fields([
+                project.creationView().fields()
+            ]);
+
+        // =======================================
+        // customize menu
+        admin.menu(nga.menu()
+            .addChild(nga.menu(skill).icon('<span class="glyphicon glyphicon-education"></span>'))
+            .addChild(nga.menu(team).icon('<span class="glyphicon glyphicon-home"></span>'))
+            .addChild(nga.menu(teammate).icon('<span class="glyphicon glyphicon-user"></span>'))
+            .addChild(nga.menu(category).icon('<span class="glyphicon glyphicon-tag"></span>'))
+            .addChild(nga.menu(project).icon('<span class="glyphicon glyphicon-tags"></span>'))
+        );
         nga.configure(admin);
     }]);
 
