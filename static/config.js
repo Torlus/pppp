@@ -224,7 +224,8 @@
                 nga.field('desc').label('Description'),
                 nga.field('category', 'reference').label('Catégorie')
                     .targetEntity(category)
-                    .targetField(nga.field('desc'))
+                    .targetField(nga.field('desc')),
+                nga.field('priority', 'number').label('Priorité')
             ])
             .listActions(['edit', 'delete']);
 
@@ -239,7 +240,8 @@
                     .validation({ required: true, minlength: 3, maxlength: 250 }),
                 nga.field('category', 'reference').label('Catégorie')
                     .targetEntity(category)
-                    .targetField(nga.field('desc'))
+                    .targetField(nga.field('desc')),
+                nga.field('priority', 'number').label('Priorité')
             ]);
 
         project.editionView()

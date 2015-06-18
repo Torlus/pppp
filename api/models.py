@@ -61,6 +61,7 @@ class Project(models.Model):
     category = models.ForeignKey(Category, on_delete=models.PROTECT)
     code = models.CharField(max_length=50, blank=False)
     desc = models.CharField(max_length=250, blank=True, default='')
+    priority = models.IntegerField(default=1)
 
     def __str__(self):
         return str(self.category) + " / [" + self.code + ": " + self.desc + "]"
@@ -73,8 +74,10 @@ class Task(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     project = models.ForeignKey(Project, on_delete=models.PROTECT)
+    team = models.ForeignKey(Team, null=True, on_delete=models.PROTECT)
     code = models.CharField(max_length=50, blank=False)
     desc = models.CharField(max_length=250, blank=True, default='')
+    priority = models.IntegerField(default=1)
 
     def __str__(self):
         return str(self.project) + " / [" + self.code + ": " + self.desc + "]"
@@ -89,6 +92,7 @@ class Work(models.Model):
     skill = models.ForeignKey(Skill, on_delete=models.PROTECT)
     task = models.ForeignKey(Task, on_delete=models.PROTECT)
     man_days = models.IntegerField()
+    priority = models.IntegerField(default=1)
 
     def __str__(self):
         return str(self.task) + " / [" + str(self.skill) + ": " + str(self.man_days) + "]"

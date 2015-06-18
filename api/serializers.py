@@ -55,18 +55,19 @@ class ProjectSerializer(serializers.ModelSerializer):
     class Meta:
         model = Project
         fields = ('id', 'url', 'created_at', 'updated_at',
-                  'code', 'desc',
+                  'code', 'desc', 'priority',
                   'category', 'category_url')
 
 
 class TaskSerializer(serializers.ModelSerializer):
     project_url = serializers.HyperlinkedRelatedField(source='project', read_only=True, view_name='project-detail')
+    team_url = serializers.HyperlinkedRelatedField(source='team', read_only=True, view_name='team-detail')
 
     class Meta:
         model = Task
         fields = ('id', 'url', 'created_at', 'updated_at',
-                  'code', 'desc',
-                  'project', 'project_url')
+                  'code', 'desc', 'priority',
+                  'project', 'project_url', 'team', 'team_url')
 
 
 class WorkSerializer(serializers.ModelSerializer):
@@ -77,6 +78,6 @@ class WorkSerializer(serializers.ModelSerializer):
     class Meta:
         model = Work
         fields = ('id', 'url', 'created_at', 'updated_at',
-                  'man_days',
+                  'man_days', 'priority',
                   'skill', 'skill_url',
                   'task', 'task_url')
