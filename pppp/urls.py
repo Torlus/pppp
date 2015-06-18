@@ -7,6 +7,7 @@ from django.contrib import admin
 admin.autodiscover()
 
 
+# router = DefaultRouter(trailing_slash=False)
 router = DefaultRouter()
 router.register(r'users', views.UserViewSet)
 router.register(r'groups', views.GroupViewSet)

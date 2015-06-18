@@ -4,17 +4,32 @@
 
     var app = angular.module('myApp', ['ng-admin']);
 
+    app.factory('slashAdder', [function() {
+        var slashAdder = {
+            request: function(config) {
+                var last = config.url[config.url.length - 1];
+                if (last != '/') {
+                    config.url += '/';
+                }
+                return config;
+            }
+        };
+        return slashAdder;
+    }]);
+
     app.config(['NgAdminConfigurationProvider', 'RestangularProvider', '$httpProvider',
     function (NgAdminConfigurationProvider, RestangularProvider, $httpProvider) {
         var nga = NgAdminConfigurationProvider;
 
         $httpProvider.defaults.xsrfCookieName = 'csrftoken';
         $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
+        $httpProvider.interceptors.push('slashAdder');
 
         // use the custom query parameters function to format the API request correctly
         RestangularProvider.addFullRequestInterceptor(function(element, operation, what, url, headers, params) {
             console.log(url);
-            console.log(params);
+            console.log(operation);
+            console.log(what);
             if (operation == "getList") {
                 // TODO
             }
@@ -27,10 +42,10 @@
             } else {
                 res = response;
             }
-            console.log(res);
+            // console.log(res);
             return res;
         });
-        RestangularProvider.setRequestSuffix('/?');
+        // RestangularProvider.setRequestSuffix('');
 
         var admin = nga.application('People Per Project Provisioning')
             .baseApiUrl('/api/');
@@ -40,6 +55,7 @@
         var teammate = nga.entity('teammates');
         var category = nga.entity('categories');
         var project = nga.entity('projects');
+        var task = nga.entity('tasks');
 
         admin
             .addEntity(skill)
@@ -47,6 +63,7 @@
             .addEntity(teammate)
             .addEntity(category)
             .addEntity(project)
+            .addEntity(task)
             ;
 
         // ========================================
@@ -251,6 +268,53 @@
             ]);
 
         // =======================================
+        // ================ TASKS ================
+        // =======================================
+
+        task.label("Tâches");
+        task.dashboardView().disable();
+
+        task.listView()
+            .title('Tâches')
+            .fields([
+                nga.field('id').label('#'),
+                nga.field('code').label('Code'),
+                nga.field('desc').label('Description'),
+                nga.field('project', 'reference').label('Projet')
+                    .targetEntity(project)
+                    .targetField(nga.field('desc')),
+                nga.field('team', 'reference').label('Equipe')
+                    .targetEntity(team)
+                    .targetField(nga.field('desc')),
+                nga.field('priority', 'number').label('Priorité')
+            ])
+            .listActions(['edit', 'delete']);
+
+        task.creationView()
+            .title('Nouvelle tâche')
+            .fields([
+                nga.field('code').label('Code')
+                    .attributes({ placeholder: 'Exemple: LOGIN' })
+                    .validation({ required: true, minlength: 3, maxlength: 50 }),
+                nga.field('desc').label('Description')
+                    .attributes({ placeholder: 'Exemple: Gestion de l\'authentification'})
+                    .validation({ required: true, minlength: 3, maxlength: 250 }),
+                nga.field('project', 'reference').label('Projet')
+                    .targetEntity(project)
+                    .targetField(nga.field('desc')),
+                nga.field('team', 'reference').label('Equipe')
+                    .targetEntity(team)
+                    .targetField(nga.field('desc')),
+                nga.field('priority', 'number').label('Priorité')
+            ]);
+
+        task.editionView()
+            .title('Edition de la tâche #{{ entry.values.id }}')
+            .fields([
+                task.creationView().fields()
+            ]);
+
+        // =======================================
         // customize menu
         admin.menu(nga.menu()
             .addChild(nga.menu(skill).icon('<span class="glyphicon glyphicon-education"></span>'))
@@ -258,6 +322,7 @@
             .addChild(nga.menu(teammate).icon('<span class="glyphicon glyphicon-user"></span>'))
             .addChild(nga.menu(category).icon('<span class="glyphicon glyphicon-tag"></span>'))
             .addChild(nga.menu(project).icon('<span class="glyphicon glyphicon-tags"></span>'))
+            .addChild(nga.menu(task).icon('<span class="glyphicon glyphicon-file"></span>'))
         );
         nga.configure(admin);
     }]);
