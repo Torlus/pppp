@@ -4,8 +4,12 @@
 
     var app = angular.module('myApp', ['ng-admin']);
 
-    app.config(['NgAdminConfigurationProvider', 'RestangularProvider', function (NgAdminConfigurationProvider, RestangularProvider) {
+    app.config(['NgAdminConfigurationProvider', 'RestangularProvider', '$httpProvider',
+    function (NgAdminConfigurationProvider, RestangularProvider, $httpProvider) {
         var nga = NgAdminConfigurationProvider;
+
+        $httpProvider.defaults.xsrfCookieName = 'csrftoken';
+        $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
 
         // use the custom query parameters function to format the API request correctly
         RestangularProvider.addFullRequestInterceptor(function(element, operation, what, url, headers, params) {
@@ -255,5 +259,6 @@
         );
         nga.configure(admin);
     }]);
+
 
 }());
