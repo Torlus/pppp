@@ -82,7 +82,8 @@
                 nga.field('code').label('Code'),
                 nga.field('desc').label('Description'),
             ])
-            .listActions(['edit', 'delete']);
+            .listActions(['edit', 'delete'])
+            .batchActions([]);
 
         skill.creationView()
             .title('Nouvelle Compétence')
@@ -116,7 +117,8 @@
                 nga.field('code').label('Code'),
                 nga.field('desc').label('Description'),
             ])
-            .listActions(['edit', 'delete']);
+            .listActions(['edit', 'delete'])
+            .batchActions([]);
 
         team.creationView()
             .title('Nouvelle Equipe')
@@ -156,6 +158,7 @@
         teammate.dashboardView().disable();
 
         teammate.listView()
+            .batchActions([])
             .title('Membres d\'équipe')
             .fields([
                 nga.field('id').label('#'),
@@ -170,7 +173,8 @@
                 nga.field('half_days_per_week').label('Disponibilité')
                     .map(function(value) { return (value / 2); })
             ])
-            .listActions(['edit', 'delete']);
+            .listActions(['edit', 'delete'])
+            .batchActions([]);
 
         teammate.creationView()
             .title('Nouveau Membre d\'équipe')
@@ -209,7 +213,8 @@
                 nga.field('code').label('Code'),
                 nga.field('desc').label('Description'),
             ])
-            .listActions(['edit', 'delete']);
+            .listActions(['edit', 'delete'])
+            .batchActions([]);
 
         category.creationView()
             .title('Nouvelle Catégorie de projets')
@@ -246,7 +251,8 @@
                     .targetField(nga.field('desc')),
                 nga.field('priority', 'number').label('Priorité')
             ])
-            .listActions(['edit', 'delete']);
+            .listActions(['edit', 'delete'])
+            .batchActions([]);
 
         project.creationView()
             .title('Nouveau Projet')
@@ -290,7 +296,8 @@
                     .targetField(nga.field('desc')),
                 nga.field('priority', 'number').label('Priorité')
             ])
-            .listActions(['edit', 'delete']);
+            .listActions(['edit', 'delete'])
+            .batchActions([]);
 
         task.creationView()
             .title('Nouvelle Tâche')
@@ -334,9 +341,10 @@
                     .targetEntity(skill)
                     .targetField(nga.field('desc')),
                 nga.field('priority', 'number').label('Priorité'),
-                nga.field('man_days', 'number').label('JH')
+                nga.field('man_days', 'number').label('Jours Homme')
             ])
-            .listActions(['edit', 'delete']);
+            .listActions(['edit', 'delete'])
+            .batchActions([]);
 
         work.creationView()
             .title('Nouvelle Charge')
@@ -348,7 +356,7 @@
                     .targetEntity(skill)
                     .targetField(nga.field('desc')),
                 nga.field('priority', 'number').label('Priorité'),
-                nga.field('man_days', 'number').label('JH')
+                nga.field('man_days', 'number').label('Jours Homme')
             ]);
 
         work.editionView()
