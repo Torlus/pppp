@@ -56,6 +56,7 @@
         var category = nga.entity('categories');
         var project = nga.entity('projects');
         var task = nga.entity('tasks');
+        var work = nga.entity('works');
 
         admin
             .addEntity(skill)
@@ -64,6 +65,7 @@
             .addEntity(category)
             .addEntity(project)
             .addEntity(task)
+            .addEntity(work)
             ;
 
         // ========================================
@@ -83,7 +85,7 @@
             .listActions(['edit', 'delete']);
 
         skill.creationView()
-            .title('Nouvelle compétence')
+            .title('Nouvelle Compétence')
             .fields([
                 nga.field('code').label('Code')
                     .attributes({ placeholder: 'Exemple: ARCH' })
@@ -94,7 +96,7 @@
             ]);
 
         skill.editionView()
-            .title('Edition de la compétence #{{ entry.values.id }}')
+            .title('Edition de la Compétence #{{ entry.values.id }}')
             .fields([
                 skill.creationView().fields()
             ]);
@@ -117,7 +119,7 @@
             .listActions(['edit', 'delete']);
 
         team.creationView()
-            .title('Nouvelle équipe')
+            .title('Nouvelle Equipe')
             .fields([
                 nga.field('code').label('Code')
                     .attributes({ placeholder: 'Exemple: SEPAMAIL' })
@@ -128,7 +130,7 @@
             ]);
 
         team.editionView()
-            .title('Edition de l\'équipe #{{ entry.values.id }}')
+            .title('Edition de l\'Equipe #{{ entry.values.id }}')
             .fields([
                 team.creationView().fields()
             ]);
@@ -154,7 +156,7 @@
         teammate.dashboardView().disable();
 
         teammate.listView()
-            .title('Membres d\'équipes')
+            .title('Membres d\'équipe')
             .fields([
                 nga.field('id').label('#'),
                 nga.field('name').label('Nom'),
@@ -171,7 +173,7 @@
             .listActions(['edit', 'delete']);
 
         teammate.creationView()
-            .title('Nouveau membre d\'équipe')
+            .title('Nouveau Membre d\'équipe')
             .fields([
                 nga.field('name').label('Nom')
                     .attributes({ placeholder: 'Exemple: Dave Lopper' })
@@ -188,7 +190,7 @@
             ]);
 
         teammate.editionView()
-            .title('Edition du membre d\'équipe #{{ entry.values.id }}')
+            .title('Edition du Membre d\'équipe #{{ entry.values.id }}')
             .fields([
                 teammate.creationView().fields()
             ]);
@@ -210,7 +212,7 @@
             .listActions(['edit', 'delete']);
 
         category.creationView()
-            .title('Nouvelle catégorie de projets')
+            .title('Nouvelle Catégorie de projets')
             .fields([
                 nga.field('code').label('Code')
                     .attributes({ placeholder: 'Exemple: MONETIQUE' })
@@ -221,7 +223,7 @@
             ]);
 
         category.editionView()
-            .title('Edition de la catégorie de projets #{{ entry.values.id }}')
+            .title('Edition de la Catégorie de projets #{{ entry.values.id }}')
             .fields([
                 category.creationView().fields()
             ]);
@@ -247,7 +249,7 @@
             .listActions(['edit', 'delete']);
 
         project.creationView()
-            .title('Nouveau projet')
+            .title('Nouveau Projet')
             .fields([
                 nga.field('code').label('Code')
                     .attributes({ placeholder: 'Exemple: LUMA' })
@@ -262,7 +264,7 @@
             ]);
 
         project.editionView()
-            .title('Edition du projet #{{ entry.values.id }}')
+            .title('Edition du Projet #{{ entry.values.id }}')
             .fields([
                 project.creationView().fields()
             ]);
@@ -291,7 +293,7 @@
             .listActions(['edit', 'delete']);
 
         task.creationView()
-            .title('Nouvelle tâche')
+            .title('Nouvelle Tâche')
             .fields([
                 nga.field('code').label('Code')
                     .attributes({ placeholder: 'Exemple: LOGIN' })
@@ -315,14 +317,56 @@
             ]);
 
         // =======================================
+        // ================ WORKS ================
+        // =======================================
+
+        work.label("Charges");
+        work.dashboardView().disable();
+
+        work.listView()
+            .title('Charges')
+            .fields([
+                nga.field('id').label('#'),
+                nga.field('task', 'reference').label('Tâche')
+                    .targetEntity(task)
+                    .targetField(nga.field('desc')),
+                nga.field('skill', 'reference').label('Compétence')
+                    .targetEntity(skill)
+                    .targetField(nga.field('desc')),
+                nga.field('priority', 'number').label('Priorité'),
+                nga.field('man_days', 'number').label('JH')
+            ])
+            .listActions(['edit', 'delete']);
+
+        work.creationView()
+            .title('Nouvelle Charge')
+            .fields([
+                nga.field('task', 'reference').label('Tâche')
+                    .targetEntity(task)
+                    .targetField(nga.field('desc')),
+                nga.field('skill', 'reference').label('Compétence')
+                    .targetEntity(skill)
+                    .targetField(nga.field('desc')),
+                nga.field('priority', 'number').label('Priorité'),
+                nga.field('man_days', 'number').label('JH')
+            ]);
+
+        work.editionView()
+            .title('Edition de la Charge #{{ entry.values.id }}')
+            .fields([
+                work.creationView().fields()
+            ]);
+
+        // =======================================
         // customize menu
         admin.menu(nga.menu()
             .addChild(nga.menu(skill).icon('<span class="glyphicon glyphicon-education"></span>'))
             .addChild(nga.menu(team).icon('<span class="glyphicon glyphicon-home"></span>'))
             .addChild(nga.menu(teammate).icon('<span class="glyphicon glyphicon-user"></span>'))
-            .addChild(nga.menu(category).icon('<span class="glyphicon glyphicon-tag"></span>'))
-            .addChild(nga.menu(project).icon('<span class="glyphicon glyphicon-tags"></span>'))
+            .addChild(nga.menu(category).icon('<span class="glyphicon glyphicon-tags"></span>'))
+            .addChild(nga.menu(project).icon('<span class="glyphicon glyphicon-tag"></span>'))
             .addChild(nga.menu(task).icon('<span class="glyphicon glyphicon-file"></span>'))
+            .addChild(nga.menu(work).icon('<span class="glyphicon glyphicon-tasks"></span>'))
         );
         nga.configure(admin);
     }]);
