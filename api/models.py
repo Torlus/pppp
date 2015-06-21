@@ -3,7 +3,7 @@ from django.db import models
 class Team(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    code = models.CharField(max_length=50, blank=False)
+    # code = models.CharField(max_length=50, blank=False)
     desc = models.CharField(max_length=250, blank=True, default='')
 
     def __str__(self):
@@ -16,7 +16,7 @@ class Team(models.Model):
 class Skill(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    code = models.CharField(max_length=50, blank=False)
+    # code = models.CharField(max_length=50, blank=False)
     desc = models.CharField(max_length=250, blank=True, default='')
 
     def __str__(self):
@@ -45,7 +45,7 @@ class Teammate(models.Model):
 class Category(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    code = models.CharField(max_length=50, blank=False)
+    # code = models.CharField(max_length=50, blank=False)
     desc = models.CharField(max_length=250, blank=True, default='')
 
     def __str__(self):
@@ -59,7 +59,7 @@ class Project(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     category = models.ForeignKey(Category, on_delete=models.PROTECT)
-    code = models.CharField(max_length=50, blank=False)
+    # code = models.CharField(max_length=50, blank=False)
     desc = models.CharField(max_length=250, blank=True, default='')
     priority = models.IntegerField(default=1)
 
@@ -74,8 +74,8 @@ class Task(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     project = models.ForeignKey(Project, on_delete=models.PROTECT)
-    team = models.ForeignKey(Team, null=True, on_delete=models.PROTECT)
-    code = models.CharField(max_length=50, blank=False)
+    teams = models.ManyToManyField(Team)
+    # code = models.CharField(max_length=50, blank=False)
     desc = models.CharField(max_length=250, blank=True, default='')
     priority = models.IntegerField(default=1)
 
@@ -91,6 +91,7 @@ class Work(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     skill = models.ForeignKey(Skill, on_delete=models.PROTECT)
     task = models.ForeignKey(Task, on_delete=models.PROTECT)
+    desc = models.CharField(max_length=250, blank=True, default='')
     man_days = models.IntegerField()
     priority = models.IntegerField(default=1)
 

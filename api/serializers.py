@@ -22,14 +22,14 @@ class TeamSerializer(serializers.ModelSerializer):
     class Meta:
         model = Team
         fields = ('id', 'url', 'created_at', 'updated_at',
-                  'code', 'desc')
+                  'desc')
 
 
 class SkillSerializer(serializers.ModelSerializer):
     class Meta:
         model = Skill
         fields = ('id', 'url', 'created_at', 'updated_at',
-                  'code', 'desc')
+                  'desc')
 
 
 class TeammateSerializer(serializers.ModelSerializer):
@@ -46,7 +46,7 @@ class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
         fields = ('id', 'url', 'created_at', 'updated_at',
-                  'code', 'desc')
+                  'desc')
 
 
 class ProjectSerializer(serializers.ModelSerializer):
@@ -55,19 +55,19 @@ class ProjectSerializer(serializers.ModelSerializer):
     class Meta:
         model = Project
         fields = ('id', 'url', 'created_at', 'updated_at',
-                  'code', 'desc', 'priority',
+                  'desc', 'priority',
                   'category', 'category_url')
 
 
 class TaskSerializer(serializers.ModelSerializer):
     project_url = serializers.HyperlinkedRelatedField(source='project', read_only=True, view_name='project-detail')
-    team_url = serializers.HyperlinkedRelatedField(source='team', read_only=True, view_name='team-detail')
+    teams_urls = serializers.HyperlinkedRelatedField(source='teams', many=True, read_only=True, view_name='team-detail')
 
     class Meta:
         model = Task
         fields = ('id', 'url', 'created_at', 'updated_at',
-                  'code', 'desc', 'priority',
-                  'project', 'project_url', 'team', 'team_url')
+                  'desc', 'priority',
+                  'project', 'project_url', 'teams', 'teams_urls')
 
 
 class WorkSerializer(serializers.ModelSerializer):
@@ -78,6 +78,7 @@ class WorkSerializer(serializers.ModelSerializer):
     class Meta:
         model = Work
         fields = ('id', 'url', 'created_at', 'updated_at',
+                  'desc',
                   'man_days', 'priority',
                   'skill', 'skill_url',
                   'task', 'task_url')

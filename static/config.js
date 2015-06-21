@@ -79,8 +79,7 @@
             .title('Compétences')
             .fields([
                 nga.field('id').label('#'),
-                nga.field('code').label('Code'),
-                nga.field('desc').label('Description'),
+                nga.field('desc').label('Description')
             ])
             .listActions(['edit', 'delete'])
             .batchActions([]);
@@ -88,9 +87,6 @@
         skill.creationView()
             .title('Nouvelle Compétence')
             .fields([
-                nga.field('code').label('Code')
-                    .attributes({ placeholder: 'Exemple: ARCH' })
-                    .validation({ required: true, minlength: 3, maxlength: 50 }),
                 nga.field('desc').label('Description')
                     .attributes({ placeholder: 'Exemple: Architecture' })
                     .validation({ required: true, minlength: 3, maxlength: 250 })
@@ -114,8 +110,7 @@
             .title('Equipes')
             .fields([
                 nga.field('id').label('#'),
-                nga.field('code').label('Code'),
-                nga.field('desc').label('Description'),
+                nga.field('desc').label('Description')
             ])
             .listActions(['edit', 'delete'])
             .batchActions([]);
@@ -123,9 +118,6 @@
         team.creationView()
             .title('Nouvelle Equipe')
             .fields([
-                nga.field('code').label('Code')
-                    .attributes({ placeholder: 'Exemple: SEPAMAIL' })
-                    .validation({ required: true, minlength: 3, maxlength: 50 }),
                 nga.field('desc').label('Description')
                     .attributes({ placeholder: 'Exemple: Equipe projet Sepamail' })
                     .validation({ required: true, minlength: 3, maxlength: 250 })
@@ -210,8 +202,7 @@
             .title('Catégories de projets')
             .fields([
                 nga.field('id').label('#'),
-                nga.field('code').label('Code'),
-                nga.field('desc').label('Description'),
+                nga.field('desc').label('Description')
             ])
             .listActions(['edit', 'delete'])
             .batchActions([]);
@@ -219,9 +210,6 @@
         category.creationView()
             .title('Nouvelle Catégorie de projets')
             .fields([
-                nga.field('code').label('Code')
-                    .attributes({ placeholder: 'Exemple: MONETIQUE' })
-                    .validation({ required: true, minlength: 3, maxlength: 50 }),
                 nga.field('desc').label('Description')
                     .attributes({ placeholder: 'Exemple: Projets monétiques' })
                     .validation({ required: true, minlength: 3, maxlength: 250 })
@@ -244,7 +232,6 @@
             .title('Projets')
             .fields([
                 nga.field('id').label('#'),
-                nga.field('code').label('Code'),
                 nga.field('desc').label('Description'),
                 nga.field('category', 'reference').label('Catégorie')
                     .targetEntity(category)
@@ -257,9 +244,6 @@
         project.creationView()
             .title('Nouveau Projet')
             .fields([
-                nga.field('code').label('Code')
-                    .attributes({ placeholder: 'Exemple: LUMA' })
-                    .validation({ required: true, minlength: 3, maxlength: 50 }),
                 nga.field('desc').label('Description')
                     .attributes({ placeholder: 'Exemple: Lyra Update MAnager' })
                     .validation({ required: true, minlength: 3, maxlength: 250 }),
@@ -286,12 +270,11 @@
             .title('Tâches')
             .fields([
                 nga.field('id').label('#'),
-                nga.field('code').label('Code'),
-                nga.field('desc').label('Description'),
                 nga.field('project', 'reference').label('Projet')
                     .targetEntity(project)
                     .targetField(nga.field('desc')),
-                nga.field('team', 'reference').label('Equipe')
+                nga.field('desc').label('Description'),
+                nga.field('teams', 'reference_many').label('Equipes')
                     .targetEntity(team)
                     .targetField(nga.field('desc')),
                 nga.field('priority', 'number').label('Priorité')
@@ -302,16 +285,13 @@
         task.creationView()
             .title('Nouvelle Tâche')
             .fields([
-                nga.field('code').label('Code')
-                    .attributes({ placeholder: 'Exemple: LOGIN' })
-                    .validation({ required: true, minlength: 3, maxlength: 50 }),
                 nga.field('desc').label('Description')
                     .attributes({ placeholder: 'Exemple: Gestion de l\'authentification'})
                     .validation({ required: true, minlength: 3, maxlength: 250 }),
                 nga.field('project', 'reference').label('Projet')
                     .targetEntity(project)
                     .targetField(nga.field('desc')),
-                nga.field('team', 'reference').label('Equipe')
+                nga.field('teams', 'reference_many').label('Equipes')
                     .targetEntity(team)
                     .targetField(nga.field('desc')),
                 nga.field('priority', 'number').label('Priorité')
@@ -334,6 +314,9 @@
             .title('Charges')
             .fields([
                 nga.field('id').label('#'),
+                nga.field('desc').label('Description')
+                    .attributes({ placeholder: 'Exemple: Chiffrement des mots de passe' })
+                    .validation({ required: true, minlength: 3, maxlength: 250 }),
                 nga.field('task', 'reference').label('Tâche')
                     .targetEntity(task)
                     .targetField(nga.field('desc')),
@@ -349,6 +332,7 @@
         work.creationView()
             .title('Nouvelle Charge')
             .fields([
+                nga.field('desc').label('Description'),
                 nga.field('task', 'reference').label('Tâche')
                     .targetEntity(task)
                     .targetField(nga.field('desc')),
