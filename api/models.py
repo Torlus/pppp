@@ -7,7 +7,7 @@ class Team(models.Model):
     desc = models.CharField(max_length=250, blank=True, default='')
 
     def __str__(self):
-        return "[" + self.code + ": " + self.desc + "]"
+        return "[" + self.desc + "]"
 
     class Meta:
         ordering = ('created_at',)
@@ -20,7 +20,7 @@ class Skill(models.Model):
     desc = models.CharField(max_length=250, blank=True, default='')
 
     def __str__(self):
-        return self.code
+        return "[" + self.desc + "]"
 
     class Meta:
         ordering = ('created_at',)
@@ -49,7 +49,7 @@ class Category(models.Model):
     desc = models.CharField(max_length=250, blank=True, default='')
 
     def __str__(self):
-        return "[" + self.code + ": " + self.desc + "]"
+        return "[" + self.desc + "]"
 
     class Meta:
         ordering = ('created_at',)
@@ -64,7 +64,7 @@ class Project(models.Model):
     priority = models.IntegerField(default=1)
 
     def __str__(self):
-        return str(self.category) + " / [" + self.code + ": " + self.desc + "]"
+        return str(self.category) + " / [" + self.desc + "]"
 
     class Meta:
         ordering = ('created_at',)
@@ -80,7 +80,7 @@ class Task(models.Model):
     priority = models.IntegerField(default=1)
 
     def __str__(self):
-        return str(self.project) + " / [" + self.code + ": " + self.desc + "]"
+        return str(self.project) + " / [" + self.desc + "]"
 
     class Meta:
         ordering = ('created_at',)
@@ -100,3 +100,4 @@ class Work(models.Model):
 
     class Meta:
         ordering = ('created_at',)
+

@@ -74,6 +74,8 @@ class WorkSerializer(serializers.ModelSerializer):
     task_url = serializers.HyperlinkedRelatedField(source='task', read_only=True, view_name='task-detail')
     skill_url = serializers.HyperlinkedRelatedField(source='skill', read_only=True, view_name='skill-detail')
     man_days = serializers.IntegerField(required=True, min_value=1)
+    project = serializers.IntegerField(source='task.project.id')
+    project_url = serializers.HyperlinkedRelatedField(source='task.project', read_only=True, view_name='project-detail')
 
     class Meta:
         model = Work
@@ -81,4 +83,5 @@ class WorkSerializer(serializers.ModelSerializer):
                   'desc',
                   'man_days', 'priority',
                   'skill', 'skill_url',
-                  'task', 'task_url')
+                  'task', 'task_url',
+                  'project', 'project_url')
