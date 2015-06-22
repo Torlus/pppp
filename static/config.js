@@ -21,8 +21,11 @@
     function (NgAdminConfigurationProvider, RestangularProvider, $httpProvider) {
         var nga = NgAdminConfigurationProvider;
 
-        function checkBounds(value, lower, upper) {
-
+        function checkBounds(lower, upper) {
+            return function(value) {
+                var n = parseInt(value);
+                return (isNaN(n) ? false : (n >= lower) && (n <= upper));
+            };
         }
 
         $httpProvider.defaults.xsrfCookieName = 'csrftoken';
@@ -255,6 +258,8 @@
                     .targetEntity(category)
                     .targetField(nga.field('desc')),
                 nga.field('priority', 'number').label('Priorité')
+                     .defaultValue(10)
+                    .validation({required: true, validator: checkBounds(1, 20)})
             ]);
 
         project.editionView()
@@ -299,6 +304,8 @@
                     .targetEntity(team)
                     .targetField(nga.field('desc')),
                 nga.field('priority', 'number').label('Priorité')
+                    .defaultValue(10)
+                    .validation({required: true, validator: checkBounds(1, 20)})
             ]);
 
         task.editionView()
@@ -348,22 +355,10 @@
                     .targetField(nga.field('desc')),
                 nga.field('priority', 'number').label('Priorité')
                     .defaultValue(10)
-                    .validation({
-                        required: true,
-                        validator: function(value) {
-                            var n = parseInt(value);
-                            return(isNan(n) ? (n > 0) && (n <= 10) : false);
-                        }
-                    }),
+                    .validation({required: true, validator: checkBounds(1, 20)}),
                 nga.field('man_days', 'number').label('Jours Homme')
                     .defaultValue(1)
-                    .validation({
-                        required: true,
-                        validator: function(value) {
-                            var n = parseInt(value);
-                            return(isNan(n) ? (n > 0) : false);
-                        }
-                    })
+                    .validation({required: true, validator: checkBounds(1, 1000)})
             ]);
 
         work.editionView()
@@ -385,6 +380,5 @@
         );
         nga.configure(admin);
     }]);
-
 
 }());
