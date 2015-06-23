@@ -61,7 +61,7 @@ class Project(models.Model):
     category = models.ForeignKey(Category, on_delete=models.PROTECT)
     # code = models.CharField(max_length=50, blank=False)
     desc = models.CharField(max_length=250, blank=True, default='')
-    priority = models.IntegerField(default=1)
+    priority = models.IntegerField(default=10)
 
     def __str__(self):
         return str(self.category) + " / [" + self.desc + "]"
@@ -77,7 +77,7 @@ class Task(models.Model):
     teams = models.ManyToManyField(Team)
     # code = models.CharField(max_length=50, blank=False)
     desc = models.CharField(max_length=250, blank=True, default='')
-    priority = models.IntegerField(default=1)
+    priority = models.IntegerField(default=10)
 
     def __str__(self):
         return str(self.project) + " / [" + self.desc + "]"
@@ -92,8 +92,8 @@ class Work(models.Model):
     skill = models.ForeignKey(Skill, on_delete=models.PROTECT)
     task = models.ForeignKey(Task, on_delete=models.PROTECT)
     desc = models.CharField(max_length=250, blank=True, default='')
-    man_days = models.IntegerField()
-    priority = models.IntegerField(default=1)
+    man_days = models.IntegerField(default=1)
+    priority = models.IntegerField(default=10)
 
     def __str__(self):
         return str(self.task) + " / [" + str(self.skill) + ": " + str(self.man_days) + "]"
