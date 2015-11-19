@@ -55,7 +55,7 @@
         // RestangularProvider.setRequestSuffix('');
 
         var admin = nga.application('People Per Project Provisioning')
-            .baseApiUrl('/api/');
+            .baseApiUrl('/pppp/api/');
 
         var skill = nga.entity('skills');
         var team = nga.entity('teams');
