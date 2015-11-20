@@ -9,8 +9,8 @@ Assuming a working installation of Python 3.
 ```
 pip install --upgrade pip
 pip install --upgrade virtualenv
-virtualenv -p /path/to/python3/python3 .env
-source .env/bin/activate
+virtualenv -p /path/to/python3/python3 env
+source env/bin/activate
 ```
 
 ## Setup
@@ -23,9 +23,7 @@ python manage.py syncdb
 
 ## Running
 
-```
-python manage.py runserver
-```
+Change the scripts located in apache/pppp
 
 # Development notes
 
@@ -36,3 +34,6 @@ python manage.py migrate
 python manage.py startapp api
 ```
 
+```
+python manage.py collectstatic
+```

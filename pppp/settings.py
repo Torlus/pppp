@@ -116,3 +116,12 @@ STATIC_URL = '/pppp/static/'
 #STATICFILES_DIRS = (
 #    os.path.join(BASE_DIR, "static"),
 #)
+
+try:
+    LOCAL_SETTINGS
+except NameError:
+    try:
+        from .local_settings import *
+    except ImportError:
+        pass
+
