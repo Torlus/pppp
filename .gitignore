@@ -1,7 +1,7 @@
 .idea
 db.sqlite3
 local_settings.py
-static/bower_components
+# static/bower_components
 .DS_Store
 __pycache__
 *.pyc
